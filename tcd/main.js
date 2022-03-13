@@ -31,18 +31,17 @@ const deleteTasks = (deleteButton) => {
 taskSubmit.addEventListener('click', evt => {
 　　evt.preventDefault();
 　　const task = taskValue.value;
-　　addTasks(task);
-　　taskValue.value = '';
-});
-
-//Enterでもイベントを発生させる 
-taskValue.addEventListener('keypress', evt => {
-    var keyName=evt.key;
-    if(keyName=="Enter"){
-    　　evt.preventDefault();
-    　　const task = taskValue.value;
+    if(task!=''){
     　　addTasks(task);
     　　taskValue.value = '';
     }
-    });
+});
+
+//Enterの無効化 
+taskValue.addEventListener('keypress', evt => {
+    var keyName=evt.key;
+    if(keyName==="Enter"){
+    　　evt.preventDefault();
+    }
+});
 
