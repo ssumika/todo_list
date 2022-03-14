@@ -7,7 +7,17 @@ const addTasks = (task) => {
 　　// 入力したタスクを追加・表示
 　　const listItem = document.createElement('li');
 　　const showItem = taskList.appendChild(listItem);
-　　showItem.innerHTML = task;
+　　listItem.innerHTML = task;
+
+    //入力された時間の表示
+    const date=new Date();
+    const hour=date.getHours();
+    const minute=date.getMinutes();
+    console.log(hour+":"+minute);
+    const time = document.createElement('text');
+    time.innerHTML = ("0"+hour).slice(-2)+":"+("0"+minute).slice(-2);
+    listItem.appendChild(time);
+    console.log(listItem);
 
 　　//タスクに削除ボタンを付与
 　　const deleteButton = document.createElement('button');
