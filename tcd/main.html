@@ -10,6 +10,9 @@
   <form>
     <input class="task_value" type="text" />
     <button class="task_submit" type="button">Add Task</button>
+    <input type="radio" name="process" value="start" onchange="check_function()">start
+    <input type="radio" name="process" value="finish" onchange="check_function()">finish
+    <input type="radio" name="process" value="stop" onchange="check_function()">stop
   </form>
   <div id="table">
     <h2>Current Tasks</h2>
