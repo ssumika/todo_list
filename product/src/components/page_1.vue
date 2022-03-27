@@ -102,12 +102,13 @@ export default({
          id: todoStorage.uid++,
          comment: comment.value,
          state: 0,
-         condition: "停止"
+         condition: "停止",
+         break: 0
       })
       // フォーム要素を空にする
       comment.value = ''
       },
-       doStart: function(item) {
+      doStart: function(item) {
          console.log("Start");
          var date=new Date();
          item.start=date.getHours() + ":"+ date.getMinutes();
@@ -115,17 +116,34 @@ export default({
          item.state = 1
       },
       doStop: function(item) {
-         console.log("Stop");
-         var date=new Date();
-         item.stop=date.getHours() + ":"+ date.getMinutes();
-         //console.log(item.stop)
-         item.condition ="再開"
+         if(item.condition=="停止"){
+            console.log("Stop");
+            var date=new Date();
+            item.stop=date.getHours() + ":"+ date.getMinutes();
+            console.log(item.stop)
+            item.condition ="再開"
+         }else{
+            console.log("Restart");
+            var date_r=new Date();
+            item.restart=date_r.getHours() + ":"+ date_r.getMinutes();
+            console.log(item.restart)
+            const [start_h,start_m]=item.stop.split(":");
+            const [finish_h,finish_m]=item.restart.split(":");
+            item.break+=(finish_h*60+finish_m)-(start_h*60+start_m);
+            console.log(item.break);
+            item.condition ="停止"
+         }
       },
-       doFinish: function(item) {
+      doFinish: function(item) {
          console.log("Finish");
          var date=new Date();
          item.finish=date.getHours() + ":"+ date.getMinutes();
          console.log(item.finish)
+
+         const [start_h,start_m]=item.start.split(":");
+         const [finish_h,finish_m]=item.finish.split(":");
+         item.time=(finish_h*60+finish_m)-(start_h*60+start_m)-item.break;
+         console.log(item.time);
          item.state = 0
       },
       
