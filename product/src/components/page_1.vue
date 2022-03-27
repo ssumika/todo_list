@@ -14,12 +14,29 @@
                <tr v-for="item in todos" v-bind:key="item.id">
                   <th>{{ item.id }}</th>
                   <td>{{ item.comment }}</td>
+                  <!--
                   <td class="state">
-                     <!-- 状態変更ボタンのモック -->
                      <button v-on:click="doChangeState(item)">
                         {{ labels[item.state] }}
                      </button>
                   </td>
+                  -->
+                  <td class="state">
+                    <div v-if="!item.state">
+                     <button v-on:click="doStart(item)">
+                        開始
+                     </button>
+                    </div>
+                    <div v-else>
+                     <button v-on:click="doStop(item)">
+                        {{item.condition}}
+                     </button>
+                     <button v-on:click="doFinish(item)">
+                        完了
+                     </button>
+                    </div>
+                  </td>
+                  
                   <td class="button">
                      <!-- 削除ボタンのモック -->
                      <button v-on:click.ctrl="doRemove(item)">
@@ -66,7 +83,7 @@ export default({
       ],
       // 選択している options の value を記憶するためのデータ
       // 初期値を「-1」つまり「すべて」にする
-      current: -1
+      current: -1,
      }
   },
   methods:{
@@ -84,11 +101,35 @@ export default({
       this.todos.push({
          id: todoStorage.uid++,
          comment: comment.value,
-         state: 0
+         state: 0,
+         condition: "停止"
       })
       // フォーム要素を空にする
       comment.value = ''
       },
+       doStart: function(item) {
+         console.log("Start");
+         var date=new Date();
+         item.start=date.getHours() + ":"+ date.getMinutes();
+         console.log(item.start)
+         item.state = 1
+      },
+      doStop: function(item) {
+         console.log("Stop");
+         var date=new Date();
+         item.stop=date.getHours() + ":"+ date.getMinutes();
+         //console.log(item.stop)
+         item.condition ="再開"
+      },
+       doFinish: function(item) {
+         console.log("Finish");
+         var date=new Date();
+         item.finish=date.getHours() + ":"+ date.getMinutes();
+         console.log(item.finish)
+         item.state = 0
+      },
+      
+
       doChangeState: function(item) {
          console.log("Change");
          item.state = item.state ? 0 : 1
