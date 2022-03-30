@@ -125,7 +125,7 @@ export default({
             console.log(item.restart)
             const [start_h,start_m]=item.stop.split(":");
             const [finish_h,finish_m]=item.restart.split(":");
-            if((finish_h*60+finish_m)-(start_h*60+start_m)>0){
+            if((finish_h*60+finish_m)-(start_h*60+start_m)>=0){
                item.break+=(finish_h*60+finish_m)-(start_h*60+start_m);
             }else{
                item.break+=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60;
@@ -142,10 +142,10 @@ export default({
 
          const [start_h,start_m]=item.start.split(":");
          const [finish_h,finish_m]=item.finish.split(":");
-         if((finish_h*60+finish_m)-(start_h*60+start_m)-item.break>0){
+         if((finish_h*60+finish_m)-(start_h*60+start_m)-item.break>=0){
             item.time=(finish_h*60+finish_m)-(start_h*60+start_m)-item.break;
          }else{
-             item.time=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60-item.break;
+            item.time=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60-item.break;
          }
          console.log(item.time);
          item.state = -1
