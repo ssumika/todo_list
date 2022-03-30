@@ -14,13 +14,6 @@
                <tr v-for="item in todos" v-bind:key="item.id">
                   <th>{{ item.id }}</th>
                   <td>{{ item.comment }}</td>
-                  <!--
-                  <td class="state">
-                     <button v-on:click="doChangeState(item)">
-                        {{ labels[item.state] }}
-                     </button>
-                  </td>
-                  -->
                   <td class="state">
                     <div v-if="!item.state">
                      <button v-on:click="doStart(item)">
@@ -34,7 +27,7 @@
                      <button v-on:click="doFinish(item)">
                         完了
                      </button>
-                    </div>
+                     </div>
                   </td>
                   
                   <td class="button">
@@ -43,6 +36,9 @@
                         削除
                      </button>
                   </td>
+                  <div v-if="item.state===-1">
+                     {{ item.time }}分
+                  </div>
                </tr>
          </tbody>
       </div>
@@ -97,7 +93,7 @@ export default({
       }
       // { 新しいID, コメント, 作業状態 }
       // というオブジェクトを現在の todos リストへ push
-      // 作業状態「state」はデフォルト「作業中=0」で作成
+      // 作業状態「state」はデフォルト「開始前=0」で作成
       this.todos.push({
          id: todoStorage.uid++,
          comment: comment.value,
@@ -129,7 +125,11 @@ export default({
             console.log(item.restart)
             const [start_h,start_m]=item.stop.split(":");
             const [finish_h,finish_m]=item.restart.split(":");
-            item.break+=(finish_h*60+finish_m)-(start_h*60+start_m);
+            if((finish_h*60+finish_m)-(start_h*60+start_m)>0){
+               item.break+=(finish_h*60+finish_m)-(start_h*60+start_m);
+            }else{
+               item.break+=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60;
+            }
             console.log(item.break);
             item.condition ="停止"
          }
@@ -142,16 +142,15 @@ export default({
 
          const [start_h,start_m]=item.start.split(":");
          const [finish_h,finish_m]=item.finish.split(":");
-         item.time=(finish_h*60+finish_m)-(start_h*60+start_m)-item.break;
+         if((finish_h*60+finish_m)-(start_h*60+start_m)-item.break>0){
+            item.time=(finish_h*60+finish_m)-(start_h*60+start_m)-item.break;
+         }else{
+             item.time=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60-item.break;
+         }
          console.log(item.time);
-         item.state = 0
+         item.state = -1
       },
-      
-
-      doChangeState: function(item) {
-         console.log("Change");
-         item.state = item.state ? 0 : 1
-      },
+     
       // 削除の処理
       doRemove: function(item) {
          console.log("Delete");
