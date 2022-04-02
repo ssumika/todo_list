@@ -12,15 +12,15 @@
          <tbody>
             <!-- [1] ここに <tr> で ToDo の要素を1行づつ繰り返し表示したい -->
                <tr v-for="item in todos" v-bind:key="item.id">
-                  <th>{{ item.id }}</th>
+                  <th>{{ item.day }}</th>
                   <td>{{ item.comment }}</td>
                   <td class="state">
-                    <div v-if="!item.state">
+                    <div v-if="item.state===0">
                      <button v-on:click="doStart(item)">
                         開始
                      </button>
                     </div>
-                    <div v-else>
+                    <div v-else-if="item.state===1">
                      <button v-on:click="doStop(item)">
                         {{item.condition}}
                      </button>
@@ -28,6 +28,9 @@
                         完了
                      </button>
                      </div>
+                     <div v-if="item.state===-1">
+                     <td>{{ item.time }}分</td>
+                  </div>
                   </td>
                   
                   <td class="button">
@@ -36,9 +39,7 @@
                         削除
                      </button>
                   </td>
-                  <div v-if="item.state===-1">
-                     {{ item.time }}分
-                  </div>
+                  
                </tr>
          </tbody>
       </div>
@@ -99,7 +100,8 @@ export default({
          comment: comment.value,
          state: 0,
          condition: "停止",
-         break: 0
+         break: 0,
+         day:new Date().getMonth()+1+"/"+new Date().getDate()
       })
       // フォーム要素を空にする
       comment.value = ''
@@ -196,5 +198,8 @@ export default({
 </script>
 
 <style>
+td{
+   padding:5px;
+}
 
 </style>
