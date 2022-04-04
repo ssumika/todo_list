@@ -127,10 +127,10 @@ export default({
             console.log(item.restart)
             const [start_h,start_m]=item.stop.split(":");
             const [finish_h,finish_m]=item.restart.split(":");
-            if((finish_h*60+finish_m)-(start_h*60+start_m)>=0){
-               item.break+=(finish_h*60+finish_m)-(start_h*60+start_m);
+            if((parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))>=0){
+               item.break+=(parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m));
             }else{
-               item.break+=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60;
+               item.break+=(parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))+24*60;
             }
             console.log(item.break);
             item.condition ="停止"
@@ -144,10 +144,13 @@ export default({
 
          const [start_h,start_m]=item.start.split(":");
          const [finish_h,finish_m]=item.finish.split(":");
-         if((finish_h*60+finish_m)-(start_h*60+start_m)-item.break>=0){
-            item.time=(finish_h*60+finish_m)-(start_h*60+start_m)-item.break;
+         console.log("start:",start_h,":",start_m);
+         console.log("finish:",finish_h,":",finish_m);
+         console.log("break",item.break);
+         if((parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))-parseInt(item.break)>=0){
+            item.time=(parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))-parseInt(item.break);
          }else{
-            item.time=(finish_h*60+finish_m)-(start_h*60+start_m)+24*60-item.break;
+            item.time=(parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))-parseInt(item.break)+24*60;
          }
          console.log(item.time);
          item.state = -1
