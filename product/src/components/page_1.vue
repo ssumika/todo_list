@@ -39,6 +39,13 @@
                         削除
                      </button>
                   </td>
+
+                  <td v-if="item.state===1">
+                     <div class="timer-result">
+                  <!--時間の経過を表示-->
+                     <p>{{( '0' + Math.floor( item.pastTime / 60000 % 60 ) ).slice(-2)}} : {{( '0'+Math.floor( item.pastTime / 1000 % 60 ) ).slice(-2)}}</p>
+                     </div>
+                  </td>
                   
                </tr>
          </tbody>
@@ -80,7 +87,7 @@ export default({
       ],
       // 選択している options の value を記憶するためのデータ
       // 初期値を「-1」つまり「すべて」にする
-      current: -1,
+      current: -1, 
      }
   },
   methods:{
@@ -101,7 +108,10 @@ export default({
          state: 0,
          condition: "停止",
          break: 0,
-         day:new Date().getMonth()+1+"/"+new Date().getDate()
+         day:new Date().getMonth()+1+"/"+new Date().getDate(),
+         startTime: 0 ,
+         pastTime: 0 ,
+         timerObj: null
       })
       // フォーム要素を空にする
       comment.value = ''
@@ -112,6 +122,13 @@ export default({
          item.start=date.getHours() + ":"+ date.getMinutes();
          console.log(item.start)
          item.state = 1
+
+         item.startTime = Date.now()
+         item.timerObj = setInterval(function(){
+            item.pastTime = Date.now() - item.startTime
+         },10)
+
+         
       },
       doStop: function(item) {
          if(item.condition=="停止"){
@@ -162,6 +179,8 @@ export default({
          var index = this.todos.indexOf(item)
          this.todos.splice(index, 1)
       },
+
+      
   },
 
   watch: {
@@ -193,8 +212,9 @@ export default({
         }, {})
         // キーから見つけやすいように、次のように加工したデータを作成
         // {0: '作業中', 1: '完了', -1: 'すべて'}
-      }
-  },
+      },
+      
+  }
 });
 
 
