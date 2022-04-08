@@ -111,6 +111,7 @@ export default({
          day:new Date().getMonth()+1+"/"+new Date().getDate(),
          startTime: 0 ,
          pastTime: 0 ,
+         stopTime: 0 ,
          timerObj: null
       })
       // フォーム要素を空にする
@@ -137,6 +138,10 @@ export default({
             item.stop=date.getHours() + ":"+ date.getMinutes();
             console.log(item.stop)
             item.condition ="再開"
+            
+            item.stopTime=item.pastTime
+            clearInterval( item.timerObj )
+
          }else{
             console.log("Restart");
             var date_r=new Date();
@@ -151,7 +156,14 @@ export default({
             }
             console.log(item.break);
             item.condition ="停止"
+
+            item.startTime = Date.now()
+            item.timerObj = setInterval(function(){
+               item.pastTime = item.stopTime + Date.now() - item.startTime 
+            },10)
          }
+
+         
       },
       doFinish: function(item) {
          console.log("Finish");
