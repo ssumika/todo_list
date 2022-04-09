@@ -43,7 +43,7 @@
                   <td v-if="item.state===1">
                      <div class="timer-result">
                   <!--時間の経過を表示-->
-                     <p>{{( '0' + Math.floor( item.pastTime / 60000 % 60 ) ).slice(-2)}} : {{( '0'+Math.floor( item.pastTime / 1000 % 60 ) ).slice(-2)}}</p>
+                     <p>{{( '0' + Math.floor( item.pastTime / 60000 ) ).slice(-2)}} : {{( '0'+Math.floor( item.pastTime / 1000 % 60 ) ).slice(-2)}}</p>
                      </div>
                   </td>
                   
