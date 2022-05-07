@@ -1,31 +1,13 @@
 <template>
-   <div id='app'>
-      <v-calendar :attributes="attrs" ></v-calendar>         
-   </div>
+  <datepicker v-model="picked" inputFormat="MM-dd" />
 </template>
 
-<script>
-
-export default({
-  name: 'CalendarTest',
-  data(){
-     return{
-      attrs: [
-         {
-            key: 'today',
-            highlight: {
-               backgroundColor: '#ff8080',
-            },
-            dates: new Date(),
-            popover: {
-               label: 'メッセージを表示できます',
-            },
-         }
-      ],
-   }
-  }
-})
+<script setup>
+import Datepicker from 'vue3-datepicker'
+import { ref } from 'vue'
+const picked = ref(new Date())
 </script>
 
-<style>
+<style scoped>
+
 </style>
