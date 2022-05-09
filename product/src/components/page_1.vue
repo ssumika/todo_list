@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import _ from "lodash"
+
 
 // https://jp.vuejs.org/v2/examples/todomvc.html
 var STORAGE_KEY = 'todos-vuejs-demo'
@@ -116,6 +118,10 @@ export default({
       })
       // フォーム要素を空にする
       comment.value = ''
+
+      const group=_.groupBy(this.todos,"day");
+      console.log(group)
+      
       },
       doStart: function(item) {
          console.log("Start");
@@ -139,6 +145,7 @@ export default({
             console.log(item.stop)
             item.condition ="再開"
             
+            //lodashを使ったグループ化(使ってない)
             item.stopTime=item.pastTime
             clearInterval( item.timerObj )
 
@@ -203,7 +210,8 @@ export default({
         todoStorage.save(todos)
       },
       // deep オプションでネストしているデータも監視できる
-      deep: true
+      deep: true,
+
     }
   },
   created() {
