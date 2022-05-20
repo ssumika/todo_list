@@ -13,6 +13,7 @@
     "lodash": "^4.17.21",
     "v-calendar": "^3.0.0-alpha.8",
     "vue": "^3.2.13",
+    "vue-moment": "^4.1.0",
     "vue-router": "^4.0.14",
     "vue3-datepicker": "^0.3.3"
   },

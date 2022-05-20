@@ -1,13 +1,9 @@
 <template>
-  <datepicker v-model="picked" inputFormat="MM-dd" />
+   <p>SPA確認</p>
 </template>
 
-<script setup>
-import Datepicker from 'vue3-datepicker'
-import { ref } from 'vue'
-const picked = ref(new Date())
+<script>
 </script>
 
-<style scoped>
-
+<style>
 </style>

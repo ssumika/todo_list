@@ -4,6 +4,7 @@
          <form class="add-form" v-on:submit.prevent="doAdd">
          <!-- コメント入力フォーム -->
          コメント <input type="text" ref="comment">
+         日付 <input type="date" v-model="setday" ref="setday">
          <!-- 追加ボタンのモック -->
          <button type="submit">追加</button>
          </form>
@@ -90,6 +91,11 @@ export default({
       // 選択している options の value を記憶するためのデータ
       // 初期値を「-1」つまり「すべて」にする
       current: -1, 
+      setday: [
+            new Date().getFullYear(),
+            ('0' + (new Date().getMonth()+1)).slice(-2),
+            ('0' + new Date().getDate()).slice(-2)
+          ].join('-'),
      }
   },
   methods:{
@@ -97,6 +103,7 @@ export default({
       doAdd: function() {
       // ref で名前を付けておいた要素を参照
       var comment = this.$refs.comment
+      var setday = this.$refs.setday
       // 入力がなければ何もしないで return
       if (!comment.value.length) {
          return
@@ -110,7 +117,7 @@ export default({
          state: 0,
          condition: "停止",
          break: 0,
-         day:new Date().getMonth()+1+"/"+new Date().getDate(),
+         day: ((setday.value).slice(-5)).replace('-','/'),
          startTime: 0 ,
          pastTime: 0 ,
          stopTime: 0 ,

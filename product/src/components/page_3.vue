@@ -1,5 +1,5 @@
 <template>
-   <p>ここは3ページです。</p>
+   <p>SPA確認</p>
 </template>
 
 <script>
