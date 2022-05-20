@@ -126,41 +126,40 @@ export default({
       // フォーム要素を空にする
       comment.value = ''
 
+      //lodashを使ったグループ化(使ってない)
       const group=_.groupBy(this.todos,"day");
       console.log(group)
       
       },
       doStart: function(item) {
-         console.log("Start");
+         //console.log("Start");
          var date=new Date();
          item.start=date.getHours() + ":"+ date.getMinutes();
-         console.log(item.start)
+         //console.log(item.start)
          item.state = 1
 
          item.startTime = Date.now()
          item.timerObj = setInterval(function(){
             item.pastTime = Date.now() - item.startTime
          },10)
-
          
       },
       doStop: function(item) {
          if(item.condition=="停止"){
-            console.log("Stop");
+            //console.log("Stop");
             var date=new Date();
             item.stop=date.getHours() + ":"+ date.getMinutes();
-            console.log(item.stop)
+            //console.log(item.stop)
             item.condition ="再開"
             
-            //lodashを使ったグループ化(使ってない)
             item.stopTime=item.pastTime
             clearInterval( item.timerObj )
 
          }else{
-            console.log("Restart");
+            //console.log("Restart");
             var date_r=new Date();
             item.restart=date_r.getHours() + ":"+ date_r.getMinutes();
-            console.log(item.restart)
+            //console.log(item.restart)
             const [start_h,start_m]=item.stop.split(":");
             const [finish_h,finish_m]=item.restart.split(":");
             if((parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))>=0){
@@ -168,7 +167,7 @@ export default({
             }else{
                item.break+=(parseInt(finish_h*60)+parseInt(finish_m))-(parseInt(start_h*60)+parseInt(start_m))+24*60;
             }
-            console.log(item.break);
+            //console.log(item.break);
             item.condition ="停止"
 
             item.startTime = Date.now()
@@ -180,10 +179,10 @@ export default({
          
       },
       doFinish: function(item) {
-         console.log("Finish");
+         //console.log("Finish");
          var date=new Date();
          item.finish=date.getHours() + ":"+ date.getMinutes();
-         console.log(item.finish)
+         //console.log(item.finish)
 
          const [start_h,start_m]=item.start.split(":");
          const [finish_h,finish_m]=item.finish.split(":");
@@ -201,7 +200,7 @@ export default({
      
       // 削除の処理
       doRemove: function(item) {
-         console.log("Delete");
+         //console.log("Delete");
          var index = this.todos.indexOf(item)
          this.todos.splice(index, 1)
       },
