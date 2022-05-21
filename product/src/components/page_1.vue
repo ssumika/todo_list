@@ -12,7 +12,7 @@
       <div class="task_table">
          <tbody>
             <!-- [1] ここに <tr> で ToDo の要素を1行づつ繰り返し表示したい -->
-               <tr v-for="item in todos" v-bind:key="item.id">
+               <tr v-for="item in tasks" v-bind:key="item.id">
                   <th>{{ item.day }}</th>
                   <td>{{ item.comment }}</td>
                   <td class="state">
@@ -96,6 +96,9 @@ export default({
             ('0' + (new Date().getMonth()+1)).slice(-2),
             ('0' + new Date().getDate()).slice(-2)
           ].join('-'),
+      schedules:[],
+      tasks:[],
+      group:[]
      }
   },
   methods:{
@@ -127,8 +130,28 @@ export default({
       comment.value = ''
 
       //lodashを使ったグループ化(使ってない)
-      const group=_.groupBy(this.todos,"day");
-      console.log(group)
+      this.group=_.groupBy(this.todos,"day");
+      console.log(this.group)
+      //console.log(this.group["05/22"][0])
+
+      this.schedules=[]
+      for(let i=0; i<Object.keys(this.todos).length; i++){
+         if (!this.schedules.includes(this.todos[i].day)){
+            this.schedules.push(this.todos[i].day)
+         }
+      }
+      this.schedules.sort()
+      //console.log(this.schedules)
+
+      this.tasks=[]
+      for (const schedule of this.schedules) {
+         for (const todo of this.todos){
+            if(todo.day===schedule){
+               this.tasks.push(todo)
+            }
+         }
+      }
+      //console.log(this.tasks)
       
       },
       doStart: function(item) {
