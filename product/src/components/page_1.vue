@@ -224,8 +224,10 @@ export default({
       // 削除の処理
       doRemove: function(item) {
          //console.log("Delete");
-         var index = this.todos.indexOf(item)
-         this.todos.splice(index, 1)
+         var index = this.tasks.indexOf(item)
+         this.tasks.splice(index, 1)
+         var index1 = this.todos.indexOf(item)
+         this.todos.splice(index1, 1)
       },
 
       
@@ -233,10 +235,10 @@ export default({
 
   watch: {
     // オプションを使う場合はオブジェクト形式にする
-    todos: {
+    tasks: {
       // 引数はウォッチしているプロパティの変更後の値
-      handler: function(todos) {
-        todoStorage.save(todos)
+      handler: function(tasks) {
+        todoStorage.save(tasks)
       },
       // deep オプションでネストしているデータも監視できる
       deep: true,
@@ -245,7 +247,7 @@ export default({
   },
   created() {
     // インスタンス作成時に自動的に fetch() する
-    this.todos = todoStorage.fetch()
+    this.tasks = todoStorage.fetch()
   },
   computed: {
     computedTodos: function() {
