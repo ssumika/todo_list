@@ -12,7 +12,7 @@
       <div class="task_table">
          <tbody>
             <!-- [1] ここに <tr> で ToDo の要素を1行づつ繰り返し表示したい -->
-               <tr v-for="item in tasks" v-bind:key="item.id">
+               <tr v-for="item in computedTodos" v-bind:key="item.id">
                   <th>{{ item.day }}</th>
                   <td>{{ item.comment }}</td>
                   <td class="state">
@@ -83,22 +83,11 @@ export default({
   data(){
      return{
       todos:[],
-      options: [
-        { value: -1, label: 'すべて' },
-        { value: 0,  label: '作業中' },
-        { value: 1,  label: '完了' }
-      ],
-      // 選択している options の value を記憶するためのデータ
-      // 初期値を「-1」つまり「すべて」にする
-      current: -1, 
       setday: [
             new Date().getFullYear(),
             ('0' + (new Date().getMonth()+1)).slice(-2),
             ('0' + new Date().getDate()).slice(-2)
           ].join('-'),
-      schedules:[],
-      tasks:[],
-      group:[]
      }
   },
   methods:{
@@ -130,30 +119,13 @@ export default({
       comment.value = ''
 
       //lodashを使ったグループ化(使ってない)
-      this.group=_.groupBy(this.todos,"day");
-      console.log(this.group)
+      let group=_.groupBy(this.todos,"day");
+      console.log(group)
       //console.log(this.group["05/22"][0])
 
-      this.schedules=[]
-      for(let i=0; i<Object.keys(this.todos).length; i++){
-         if (!this.schedules.includes(this.todos[i].day)){
-            this.schedules.push(this.todos[i].day)
-         }
-      }
-      this.schedules.sort()
-      //console.log(this.schedules)
-
-      this.tasks=[]
-      for (const schedule of this.schedules) {
-         for (const todo of this.todos){
-            if(todo.day===schedule){
-               this.tasks.push(todo)
-            }
-         }
-      }
-      //console.log(this.tasks)
-      
       },
+
+      //開始を押したらタイマーを動かす
       doStart: function(item) {
          //console.log("Start");
          var date=new Date();
@@ -167,6 +139,8 @@ export default({
          },10)
          
       },
+
+      //停止/再開を押したらタイマーを一時停止/再開
       doStop: function(item) {
          if(item.condition=="停止"){
             //console.log("Stop");
@@ -198,9 +172,9 @@ export default({
                item.pastTime = item.stopTime + Date.now() - item.startTime 
             },10)
          }
-
-         
       },
+
+      //完了を押したら時間を表示
       doFinish: function(item) {
          //console.log("Finish");
          var date=new Date();
@@ -221,13 +195,11 @@ export default({
          item.state = -1
       },
      
-      // 削除の処理
+      //削除の処理
       doRemove: function(item) {
          //console.log("Delete");
-         var index = this.tasks.indexOf(item)
-         this.tasks.splice(index, 1)
-         var index1 = this.todos.indexOf(item)
-         this.todos.splice(index1, 1)
+         var index = this.todos.indexOf(item)
+         this.todos.splice(index, 1)
       },
 
       
@@ -235,10 +207,10 @@ export default({
 
   watch: {
     // オプションを使う場合はオブジェクト形式にする
-    tasks: {
+    todos: {
       // 引数はウォッチしているプロパティの変更後の値
-      handler: function(tasks) {
-        todoStorage.save(tasks)
+      handler: function(todos) {
+        todoStorage.save(todos)
       },
       // deep オプションでネストしているデータも監視できる
       deep: true,
@@ -247,24 +219,30 @@ export default({
   },
   created() {
     // インスタンス作成時に自動的に fetch() する
-    this.tasks = todoStorage.fetch()
+    this.todos = todoStorage.fetch()
   },
   computed: {
+   //todosの中身を日付順にソートする
     computedTodos: function() {
-      // データ current が -1 ならすべて
-      // それ以外なら current と state が一致するものだけに絞り込む
-      return this.todos.filter(function(el) {
-        return this.current < 0 ? true : this.current === el.state
-      }, this)
+      let schedules=[]
+      for(let i=0; i<Object.keys(this.todos).length; i++){
+         if (!schedules.includes(this.todos[i].day)){
+            schedules.push(this.todos[i].day)
+         }
+      }
+      schedules.sort()
+      //console.log(this.schedules)
+
+      let tasks=[]
+      for (const schedule of schedules) {
+         for (const todo of this.todos){
+            if(todo.day===schedule){
+               tasks.push(todo)
+            }
+         }
+      }
+      return tasks;
     },
-    labels() {
-        return this.options.reduce(function(a, b) {
-          return Object.assign(a, { [b.value]: b.label })
-        }, {})
-        // キーから見つけやすいように、次のように加工したデータを作成
-        // {0: '作業中', 1: '完了', -1: 'すべて'}
-      },
-      
   }
 });
 
