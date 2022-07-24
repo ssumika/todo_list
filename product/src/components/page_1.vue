@@ -12,8 +12,12 @@
       <div class="task_table">
          <tbody>
             <!-- [1] ここに <tr> で ToDo の要素を1行づつ繰り返し表示したい -->
-               <tr v-for="item in computedTodos" v-bind:key="item.id">
-                  <th>{{ item.day }}</th>
+               <div v-for="item in computedTodos" v-bind:key="item.id">
+                  <div id="showItem">
+                     <div v-if="item.startday===true">
+                        <div id="showDay">{{ item.day }} </div>
+                     </div>
+                  <!--  <th>{{ item.day }}</th> -->
                   <td>{{ item.comment }}</td>
                   <td class="state">
                     <div v-if="item.state===0">
@@ -47,8 +51,8 @@
                      <p>{{( '0' + Math.floor( item.pastTime / 60000 ) ).slice(-2)}} : {{( '0'+Math.floor( item.pastTime / 1000 % 60 ) ).slice(-2)}}</p>
                      </div>
                   </td>
-                  
-               </tr>
+                  </div>
+               </div>
          </tbody>
       </div>
    </div>
@@ -113,7 +117,8 @@ export default({
          startTime: 0 ,
          pastTime: 0 ,
          stopTime: 0 ,
-         timerObj: null
+         timerObj: null ,
+         startDay : false
       })
       // フォーム要素を空にする
       comment.value = ''
@@ -241,6 +246,16 @@ export default({
             }
          }
       }
+      if(tasks.length>=1){
+         let taskDay=schedules[0]
+         tasks[0].startday=true
+         for(const task of tasks) {
+            if(task.day!=taskDay){
+               task.startday=true
+               taskDay=task.day
+            }
+         }
+      }
       return tasks;
     },
   }
@@ -252,6 +267,14 @@ export default({
 <style>
 td{
    padding:5px;
+}
+#showItem{
+   font-size:15px;
+   font-family:'Amatic SC', cursive;
+}
+
+#showDay{
+   font-size:20px;
 }
 
 </style>
