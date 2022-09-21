@@ -235,7 +235,7 @@ export default({
             schedules.push(this.todos[i].day)
          }
       }
-      schedules.sort()
+      schedules.sort().reverse();
       //console.log(this.schedules)
 
       let tasks=[]
@@ -246,6 +246,7 @@ export default({
             }
          }
       }
+      
       if(tasks.length>=1){
          let taskDay=schedules[0]
          tasks[0].startday=true
@@ -256,6 +257,7 @@ export default({
             }
          }
       }
+      
       return tasks;
     },
   }
