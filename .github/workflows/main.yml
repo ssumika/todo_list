@@ -1,4 +1,3 @@
-//https://qiita.com/hiroyuki_0507/items/e86b8660c212e7e0cfbd
 name: CI
 
 on: [push]
